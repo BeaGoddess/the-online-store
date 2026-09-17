@@ -3,6 +3,7 @@ import { Search, X } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Link, useFetcher, useNavigate } from "react-router";
 import type { loader } from "~/routes/search-preview";
+import { Overlay } from "~/components/Overlay";
 import {
   SearchProductSkeleton,
   SearchProduct,
@@ -87,7 +88,7 @@ export const SearchOverlay = () => {
         )}
         onTransitionEnd={resetSearchInput}
       >
-        <div className="container mx-auto flex flex-col justify-center gap-5 px-12 py-10">
+        <div className="container mx-auto flex flex-col justify-center gap-5 p-6 md:px-12 md:py-10">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold">Search for products</h2>
             <X className="size-6 cursor-pointer" onClick={handleClose} />
@@ -147,21 +148,10 @@ export const SearchOverlay = () => {
           )}
         </div>
       </div>
-      {/* Overlay */}
-      <div
-        onClick={handleClose}
-        className={cn(
-          "absolute top-0 right-0 z-10 h-screen w-full bg-black/50 opacity-0 transition-opacity duration-300",
-          isOpen && "opacity-100",
-          !isOpen && "pointer-events-none",
-        )}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Esc") {
-            handleClose();
-          }
-        }}
+      <Overlay
+        isOpen={isOpen}
+        onClose={handleClose}
+        className="absolute top-0 right-0 w-full"
       />
     </>
   );

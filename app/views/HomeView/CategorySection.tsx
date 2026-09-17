@@ -1,25 +1,15 @@
 import { type Category } from "~/types/category";
-import { useLoaderData, useSearchParams } from "react-router";
-import { FILTER_OPTIONS } from "~/constants/filters";
+import { useLoaderData } from "react-router";
 import type { loader } from "~/routes/home";
+import { useCategoryFilter } from "~/hooks/useCategoryFilter";
 
 export const CategorySection = () => {
   const { categories } = useLoaderData<typeof loader>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedCategory = searchParams.get(FILTER_OPTIONS.CATEGORY);
+  const { selectedCategory, selectCategory } = useCategoryFilter();
 
   const toggleCategory = (category: Category) => {
     const sameCategory = selectedCategory === category.slug;
-    const next = new URLSearchParams(searchParams);
-    if (sameCategory) {
-      next.delete(FILTER_OPTIONS.CATEGORY);
-    } else {
-      next.set(FILTER_OPTIONS.CATEGORY, category.slug);
-    }
-    next.delete(FILTER_OPTIONS.PAGE);
-    next.delete(FILTER_OPTIONS.Q);
-    setSearchParams(next);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    selectCategory(sameCategory ? "" : category.slug);
   };
 
   return (

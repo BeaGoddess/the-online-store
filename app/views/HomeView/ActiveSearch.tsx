@@ -7,6 +7,7 @@ export const ActiveSearch = () => {
 
   const handleRemoveSearch = () => {
     searchParams.delete("q");
+    searchParams.delete("page");
     setSearchParams(searchParams);
   };
 

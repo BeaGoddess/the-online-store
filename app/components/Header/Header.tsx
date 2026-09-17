@@ -1,10 +1,11 @@
-import { User, ShoppingBag, Menu } from "lucide-react";
+import { User, ShoppingBag } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { NavItem } from "~/components/NavItem";
 import { navLinks } from "~/constants/navLinks";
 import { cn } from "~/lib/utils";
 import { SearchOverlay } from "~/components/SearchOverlay";
+import { MenuDrawer } from "~/components/MenuDrawer";
 
 export const Header = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -60,9 +61,7 @@ export const Header = () => {
           >
             <ShoppingBag className="size-6" strokeWidth={1.5} />
           </Link>
-          <button className="lg:hidden" type="button">
-            <Menu className="size-6" strokeWidth={1.5} />
-          </button>
+          <MenuDrawer />
         </div>
       </div>
     </header>

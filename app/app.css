@@ -12,7 +12,7 @@
 
 html,
 body {
-  @apply text-primary font-inter bg-white text-[15px] leading-5;
+  @apply text-primary font-inter bg-white text-sm leading-5 md:text-[15px];
 }
 
 h1,

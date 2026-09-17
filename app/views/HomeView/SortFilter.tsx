@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useSearchParams } from "react-router";
 import { FILTER_OPTIONS } from "~/constants/filters";
+import { SORT_OPTIONS } from "~/constants/filters";
 
 export const SortFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,11 +26,20 @@ export const SortFilter = () => {
         next.set(FILTER_OPTIONS.SORT_BY, "price");
         next.set(FILTER_OPTIONS.ORDER, "desc");
         break;
+      case "title-asc":
+        next.set(FILTER_OPTIONS.SORT_BY, "title");
+        next.set(FILTER_OPTIONS.ORDER, "asc");
+        break;
+      case "title-desc":
+        next.set(FILTER_OPTIONS.SORT_BY, "title");
+        next.set(FILTER_OPTIONS.ORDER, "desc");
+        break;
       default:
         next.delete(FILTER_OPTIONS.SORT_BY);
         next.delete(FILTER_OPTIONS.ORDER);
         break;
     }
+    next.delete(FILTER_OPTIONS.PAGE);
     setSearchParams(next);
   };
 
@@ -40,9 +50,11 @@ export const SortFilter = () => {
         onChange={onSortChange}
         value={getValue()}
       >
-        <option value="all">Sort by</option>
-        <option value="price-asc">Sort by price: Low to High</option>
-        <option value="price-desc">Sort by price: High to Low</option>
+        {SORT_OPTIONS.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
       </select>
       <ChevronDown className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
     </div>

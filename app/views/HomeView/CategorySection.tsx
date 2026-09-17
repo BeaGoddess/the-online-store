@@ -17,12 +17,13 @@ export const CategorySection = () => {
       next.set(FILTER_OPTIONS.CATEGORY, category.slug);
     }
     next.delete(FILTER_OPTIONS.PAGE);
+    next.delete(FILTER_OPTIONS.Q);
     setSearchParams(next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <div className="sticky top-0 flex min-w-60 flex-col gap-4 py-6">
+    <div className="sticky top-0 hidden min-w-60 flex-col gap-4 py-6 md:flex">
       <p className="mb-2 font-semibold">Categories</p>
       {categories.map((category) => (
         <label key={category.slug} className="flex items-center gap-2">

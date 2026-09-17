@@ -1,14 +1,14 @@
 import { cn } from "~/lib/utils";
-import { NavLink as RouterNavLink } from "react-router";
+import { NavLink } from "react-router";
 
-interface NavLinkProps {
+interface NavItemProps {
   to: string;
   children: React.ReactNode;
 }
 
-export const NavLink = ({ to, children }: NavLinkProps) => {
+export const NavItem = ({ to, children }: NavItemProps) => {
   return (
-    <RouterNavLink
+    <NavLink
       to={to}
       end={to === "/"}
       className={({ isActive }) =>
@@ -19,6 +19,6 @@ export const NavLink = ({ to, children }: NavLinkProps) => {
       }
     >
       {children}
-    </RouterNavLink>
+    </NavLink>
   );
 };

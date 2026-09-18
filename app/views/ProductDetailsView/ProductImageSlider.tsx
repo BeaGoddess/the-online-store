@@ -1,6 +1,7 @@
 import { cn } from "~/lib/utils";
 import { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { Button } from "~/components/Button";
 
 interface ProductImageSliderProps {
   images: string[];
@@ -73,26 +74,26 @@ export const ProductImageSlider = ({
       {images.length > 1 && (
         <>
           <div className="absolute top-1/2 right-0 left-0 mx-1 flex -translate-y-1/2 items-center justify-between md:mx-6">
-            <button
-              type="button"
+            <Button
+              variant="unstyled"
               onClick={handlePrevious}
               className="text-primary hover:text-primary/50 cursor-pointer transition-all duration-300"
             >
               <ChevronLeftIcon className="size-6" />
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="unstyled"
               onClick={handleNext}
               className="text-primary hover:text-primary/50 cursor-pointer transition-all duration-300"
             >
               <ChevronRightIcon className="size-6" />
-            </button>
+            </Button>
           </div>
           <div className="absolute right-0 bottom-6 left-0 flex items-center justify-center gap-2">
             {images.map((_, index) => (
-              <button
+              <Button
                 key={index}
-                type="button"
+                variant="unstyled"
                 onClick={handleBubbleClick(index + 1)}
                 className={cn(
                   "h-2 rounded-full transition-all duration-500",

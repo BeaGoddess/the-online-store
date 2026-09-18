@@ -9,6 +9,9 @@ import {
 // Figma shows 9 products per page, but 12 is a better number for better responsive layouts (mobile & desktop)
 export const DEFAULT_LIMIT = 12;
 
+export const getDiscountedPrice = (price: number, discountPercentage: number) =>
+  price - (price * discountPercentage) / 100;
+
 export const getProduct = async (id: string): Promise<Product> => {
   const response = await apiFetch<Product>({
     path: `/products/${id}`,

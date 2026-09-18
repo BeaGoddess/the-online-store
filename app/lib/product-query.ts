@@ -42,7 +42,10 @@ export const buildProductQueryParams = ({
   if (currentPage > 1) {
     params.set(FILTER_OPTIONS.SKIP, ((currentPage - 1) * limit).toString());
   }
-  params.set(FILTER_OPTIONS.SELECT, "title,price,description,images");
+  params.set(
+    FILTER_OPTIONS.SELECT,
+    "title,price,description,images,brand,rating,discountPercentage,stock,availabilityStatus,warrantyInformation,shippingInformation,returnPolicy",
+  );
 
   return params;
 };

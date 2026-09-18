@@ -4,6 +4,7 @@ import { NavItem } from "~/components/NavItem";
 import { Overlay } from "~/components/Overlay";
 import { navLinks } from "~/constants/navLinks";
 import { cn } from "~/lib/utils";
+import { Button } from "../Button";
 
 export const MenuDrawer = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,18 +14,13 @@ export const MenuDrawer = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={toggleMenu}
-        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        className="lg:hidden"
-      >
+      <Button className="lg:hidden" onClick={toggleMenu} variant="unstyled">
         {isMenuOpen ? (
           <X className="size-6" strokeWidth={1.5} />
         ) : (
           <Menu className="size-6" strokeWidth={1.5} />
         )}
-      </button>
+      </Button>
 
       <nav
         className={cn(
@@ -32,14 +28,13 @@ export const MenuDrawer = () => {
           isMenuOpen ? "translate-x-0" : "pointer-events-none translate-x-full",
         )}
       >
-        <button
-          type="button"
-          onClick={closeMenu}
-          aria-label="Close menu"
+        <Button
           className="mb-4 self-end"
+          onClick={closeMenu}
+          variant="unstyled"
         >
           <X className="size-6" strokeWidth={1.5} />
-        </button>
+        </Button>
         {navLinks.map((link) => (
           <NavItem
             key={link.to}

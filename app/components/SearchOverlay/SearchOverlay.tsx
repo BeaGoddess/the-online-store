@@ -4,10 +4,12 @@ import { cn } from "~/lib/utils";
 import { Link, useFetcher, useNavigate } from "react-router";
 import type { loader } from "~/routes/search-preview";
 import { Overlay } from "~/components/Overlay";
+import { Input } from "~/components/Input";
 import {
   SearchProductSkeleton,
   SearchProduct,
 } from "~/components/SearchOverlay";
+import { Button } from "../Button";
 
 export const SearchOverlay = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export const SearchOverlay = () => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      inputRef.current?.focus();
     } else {
       document.body.style.overflow = "auto";
     }
@@ -72,13 +75,13 @@ export const SearchOverlay = () => {
   return (
     <>
       {/* Trigger Button to open the search products */}
-      <button
-        type="button"
+      <Button
+        variant="unstyled"
         onClick={toggleButton}
         className="hover:text-primary/70 cursor-pointer transition-colors duration-300"
       >
         <Search className="size-6" strokeWidth={1.5} />
-      </button>
+      </Button>
       {/* Search Products */}
       <div
         className={cn(
@@ -99,12 +102,11 @@ export const SearchOverlay = () => {
             action="/search-preview"
             onSubmit={onSubmit}
           >
-            <input
-              type="text"
+            <Input
               ref={inputRef}
               placeholder="Search..."
               name="q"
-              className="border-primary focus:border-primary/40 w-full appearance-none rounded-lg border px-4 py-2 pr-9 transition-colors duration-300 focus:outline-none"
+              className="pr-9"
               onChange={onChange}
             />
             <Search className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-gray-400" />

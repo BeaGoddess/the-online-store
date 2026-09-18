@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { Button } from "../Button";
 
 interface PaginationProps {
   currentPage: number;
@@ -23,20 +24,19 @@ export const Pagination = ({
   return (
     <div className={cn("flex items-center", className)}>
       {currentPage > 1 && (
-        <button
-          type="button"
+        <Button
+          variant="unstyled"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage <= 1}
-          aria-label="Previous page"
           className="text-primary cursor-pointer disabled:opacity-30"
         >
           <ChevronLeft className="size-5" strokeWidth={1.5} />
-        </button>
+        </Button>
       )}
       {pages.map((page) => (
-        <button
+        <Button
+          variant="unstyled"
           key={page}
-          type="button"
           onClick={() => onPageChange(page)}
           className={cn(
             "flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-lg transition-colors duration-300",
@@ -46,18 +46,17 @@ export const Pagination = ({
           )}
         >
           {page}
-        </button>
+        </Button>
       ))}
       {currentPage < totalPages && (
-        <button
-          type="button"
+        <Button
+          variant="unstyled"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage >= totalPages}
-          aria-label="Next page"
           className="text-primary cursor-pointer disabled:opacity-30"
         >
           <ChevronRight className="size-5" strokeWidth={1.5} />
-        </button>
+        </Button>
       )}
     </div>
   );

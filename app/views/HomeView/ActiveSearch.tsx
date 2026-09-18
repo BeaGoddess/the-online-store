@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useSearchParams } from "react-router";
+import { Button } from "~/components/Button";
 
 export const ActiveSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -18,12 +19,13 @@ export const ActiveSearch = () => {
       <span className="text-sm text-gray-400">Results for</span>
       <span className="bg-primary/5 text-primary flex items-center gap-1.5 rounded-full px-3 py-1 text-sm">
         &quot;{searchQuery}&quot;
-        <button
+        <Button
+          variant="unstyled"
           onClick={handleRemoveSearch}
           className="hover:text-primary/50 cursor-pointer"
         >
           <X className="size-3.5" />
-        </button>
+        </Button>
       </span>
     </div>
   );

@@ -8,18 +8,45 @@
   --font-ubuntu: "Ubuntu", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
   --color-primary: #1f3044;
+  --animate-fade-in: fade-in 0.3s ease-in-out;
+  --animate-fade-out: fade-out 0.3s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 html,
 body {
-  @apply text-primary font-inter bg-white text-sm leading-5 md:text-[15px];
+  @apply text-primary font-inter bg-white text-sm leading-5 tracking-normal md:text-[15px];
 }
 
-h1,
+h1 {
+  @apply font-heading tracking-wide;
+}
+
 h2,
 h3,
 h4,
 h5,
 h6 {
-  @apply font-heading tracking-wide;
+  @apply font-ubuntu tracking-normal;
 }

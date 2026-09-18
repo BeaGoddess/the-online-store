@@ -1,6 +1,9 @@
 import type { Route } from "./+types/search-preview";
 import { getProducts } from "~/lib/product";
 import type { ProductResponse } from "~/types/product";
+import { getErrorMessage } from "~/lib/errors";
+
+export const shouldRevalidate = () => false;
 
 export interface SearchPreviewResponse {
   query: string;
@@ -19,12 +22,10 @@ export async function loader({
     const productsData = await getProducts(url);
     return { query: q, productsData, error: null };
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Something went wrong.";
     return {
       query: q,
       productsData: null,
-      error: message,
+      error: getErrorMessage(err, "We couldn't load the products."),
     };
   }
 }

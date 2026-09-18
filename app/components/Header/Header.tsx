@@ -25,6 +25,12 @@ export const Header = () => {
     lastScrollY.current = window.scrollY;
 
     const handleScroll = () => {
+      // Windows problem, when the body overflow is hidden, the scroll event is triggered
+      // MacOS doesn't have this problem
+      if (document.body.style.overflow === "hidden") {
+        return;
+      }
+
       const currentScrollY = window.scrollY;
       const isScrollingDown = currentScrollY > lastScrollY.current;
       const isAtTop = currentScrollY < 64; // header height

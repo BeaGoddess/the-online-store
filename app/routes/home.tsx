@@ -1,6 +1,7 @@
 import type { Route } from "./+types/home";
 import { HomeView } from "~/views/HomeView";
 import { getProducts } from "~/lib/product";
+import { getErrorMessage } from "~/lib/errors";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,11 +16,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     const products = await getProducts(url);
     return { productsData: products, error: null };
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Something went wrong.";
     return {
       productsData: null,
-      error: message,
+      error: getErrorMessage(err, "We couldn't load the products."),
     };
   }
 }

@@ -31,6 +31,14 @@ export const SearchProduct = ({ product, handleClose }: SearchProductProps) => {
             -{Math.round(product.discountPercentage)}%
           </Badge>
         )}
+        {product.stock === 0 && (
+          <Badge
+            variant="secondary"
+            className="absolute top-1 right-1 px-1 text-[10px]"
+          >
+            Out of stock
+          </Badge>
+        )}
       </div>
       <p className="text-sm">{product.title}</p>
       <div className="flex items-center gap-1">

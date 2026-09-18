@@ -57,6 +57,8 @@ npm run lint        # eslint
 - Filter by category (desktop: sidebar checkbox list, scrollable; mobile: dropdown select)
 - Search results view — shows an active "Results for `<search>`" chip with a clear button when arriving from a search
 - Out of stock products are badged on their card
+- "No products found" empty state when a search/filter has no matches, with a "Reset filters" action
+- Error state with a "Try again" retry action if products fail to load
 
 
 
@@ -74,6 +76,7 @@ npm run lint        # eslint
 - Product details: rating, description, warranty, shipping, and return policy
 - Reviews accordion — collapsible section showing `Reviews (count)` and the average star rating in the header. Expands to list each reviewer's name, star rating, comment, and date. Shows "No reviews yet" when a product has none.
 - Add to cart, with a confirmation in the header
+- Error state (product not found or failed to load) with a "Back to Shop" link
 
 
 
@@ -84,6 +87,7 @@ npm run lint        # eslint
 - Checkout summary: subtotal, shipping fee, total
 - Promo code input (UI only)
 - Empty-cart state with a "Continue Shopping" link
+- Error state if the cart fails to load, with a "Continue Shopping" link
 
 
 
@@ -199,5 +203,29 @@ app/
 |                                                        |                                                        |
 | ------------------------------------------------------ | ------------------------------------------------------ |
 | ![Cart mobile](public/mobile-cart.png) Cart with items | ![Empty cart](public/mobile-cart-empty.png) Empty cart |
+
+
+
+
+### Error & Empty States
+
+Shared across Home, Product details, and Cart. A reusable placeholder (icon, message, and a recovery action) covers both failed loads and "nothing to show" cases.
+
+**Desktop**
+
+
+|                                                                              |                                                                                     |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| ![No products found](public/desktop-no-products-found.png) No products found | ![Products failed to load](public/desktop-error-products.png) Products error, retry |
+| ![Product failed to load](public/desktop-error-product.png) Product error    | ![Cart failed to load](public/desktop-error-cart.png) Cart error                    |
+
+
+**Mobile**
+
+
+|                                                                                    |                                                                                           |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| ![No products found mobile](public/mobile-no-products-found.png) No products found | ![Products failed to load mobile](public/mobile-error-products.png) Products error, retry |
+| ![Product failed to load mobile](public/mobile-error-product.png) Product error    | ![Cart failed to load mobile](public/mobile-error-cart.png) Cart error                    |
 
 

@@ -1,17 +1,20 @@
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
-import { useFetcher, useLoaderData } from "react-router";
+import { Link, useFetcher, useLoaderData } from "react-router";
 import { ProductImageSlider } from "~/views/ProductDetailsView";
 import type { action, loader } from "~/routes/product.$id";
 import { useLastAddedProduct } from "~/hooks/useLastAddedProduct";
 import { Accordion } from "~/components/Accordion";
 import { Badge } from "~/components/Badge";
-import { Button } from "~/components/Button";
+import { Button, buttonVariants } from "~/components/Button";
 import { Rating } from "~/components/Rating";
+import { StatePlaceholder } from "~/components/StatePlaceholder";
 import { getDiscountedPrice } from "~/lib/product";
+import { cn } from "~/lib/utils";
+import { toast } from "sonner";
 
 export const ProductDetailsView = () => {
-  const { product } = useLoaderData<typeof loader>();
+  const { product, error } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const { showLastAddedProduct } = useLastAddedProduct();
 
@@ -19,7 +22,28 @@ export const ProductDetailsView = () => {
     if (fetcher.data?.success) showLastAddedProduct(fetcher.data.addedItem);
   }, [fetcher.data, showLastAddedProduct]);
 
-  if (!product) return null;
+  useEffect(() => {
+    if (fetcher.data?.success === false) {
+      toast.error(fetcher.data.error);
+    }
+  }, [fetcher.data]);
+
+  if (!product || error) {
+    return (
+      <StatePlaceholder
+        title="Something went wrong"
+        message={error ?? "We couldn't find this product."}
+        action={
+          <Link
+            to="/"
+            className={cn(buttonVariants.primary, "mt-2 cursor-pointer")}
+          >
+            Back to Shop
+          </Link>
+        }
+      />
+    );
+  }
 
   const isAddingToCart = fetcher.state === "submitting";
   const isOutOfStock = product.stock === 0;

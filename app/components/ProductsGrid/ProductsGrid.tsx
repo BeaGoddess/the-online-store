@@ -1,10 +1,14 @@
-import { Link } from "react-router";
+import { Link, useRevalidator } from "react-router";
+import { SearchX } from "lucide-react";
 import { Badge } from "~/components/Badge";
+import { Button } from "~/components/Button";
+import { StatePlaceholder } from "~/components/StatePlaceholder";
 import type { Product } from "~/types/product";
 import { DEFAULT_LIMIT } from "~/lib/product";
 import { getDiscountedPrice } from "~/lib/product";
 import { Pagination } from "~/components/Pagination";
 import { ProductSkeleton } from "~/components/ProductsGrid";
+import { useOptimisticSearchParams } from "~/hooks/useOptimisticSearchParams";
 
 interface ProductsGridProps {
   products: Product[];
@@ -23,6 +27,19 @@ export const ProductsGrid = ({
   onPageChange,
   isLoading = false,
 }: ProductsGridProps) => {
+  const revalidator = useRevalidator();
+  const isRetrying = revalidator.state === "loading";
+
+  const [, setSearchParams] = useOptimisticSearchParams();
+
+  const handleResetFilters = () => {
+    setSearchParams(new URLSearchParams());
+  };
+
+  const handleRetry = () => {
+    revalidator.revalidate();
+  };
+
   if (isLoading) {
     return (
       <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
@@ -30,6 +47,37 @@ export const ProductsGrid = ({
           <ProductSkeleton key={index} />
         ))}
       </ul>
+    );
+  }
+
+  if (error) {
+    return (
+      <StatePlaceholder
+        titleClassName="text-3xl"
+        title="Something went wrong"
+        message={error}
+        action={
+          <Button className="mt-2" disabled={isRetrying} onClick={handleRetry}>
+            {revalidator.state === "loading" ? "Retrying..." : "Try again"}
+          </Button>
+        }
+      />
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <StatePlaceholder
+        icon={SearchX}
+        titleClassName="text-3xl"
+        title="No products found"
+        message="Try adjusting your search or filters."
+        action={
+          <Button className="mt-2" onClick={handleResetFilters}>
+            Reset filters
+          </Button>
+        }
+      />
     );
   }
 
@@ -79,7 +127,6 @@ export const ProductsGrid = ({
             </Link>
           </li>
         ))}
-        {error && <p>{error}</p>}
       </ul>
       <Pagination
         className="justify-end"

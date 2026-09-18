@@ -36,5 +36,6 @@ export const getProducts = async (url: URL): Promise<ProductResponse> => {
   const response = await apiFetch<ProductResponse>({
     path,
   });
+
   return response.data;
 };

@@ -2,6 +2,7 @@ import { Link, useFetchers, useRouteLoaderData } from "react-router";
 import { useMemo } from "react";
 import { Button, buttonVariants } from "~/components/Button";
 import { Input } from "~/components/Input";
+import { StatePlaceholder } from "~/components/StatePlaceholder";
 import { SHIPPING_FEE } from "~/constants/cart";
 import { cn } from "~/lib/utils";
 import type { loader as rootLoader } from "~/root";
@@ -10,7 +11,7 @@ import { CartItemRow } from "~/views/CartView";
 
 export const CartView = () => {
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
-  const { cartItems } = rootData ?? { cartItems: [] };
+  const { cartItems, error } = rootData ?? { cartItems: [], error: null };
   const fetchers = useFetchers();
 
   const optimisticCartItems = useMemo(() => {
@@ -33,12 +34,33 @@ export const CartView = () => {
     });
   }, [cartItems, fetchers]);
 
-  const subTotal = optimisticCartItems.reduce(
-    (sum, product) => sum + product.price * product.quantity,
-    0,
+  const subTotal = useMemo(
+    () =>
+      optimisticCartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      ),
+    [optimisticCartItems],
   );
 
   const totalOrder = subTotal + SHIPPING_FEE;
+
+  if (error) {
+    return (
+      <StatePlaceholder
+        title="Something went wrong."
+        message={typeof error === "string" ? error : undefined}
+        action={
+          <Link
+            to="/"
+            className={cn(buttonVariants.primary, "cursor-pointer")}
+          >
+            Continue Shopping
+          </Link>
+        }
+      />
+    );
+  }
 
   if (optimisticCartItems.length === 0) {
     return (

@@ -5,5 +5,6 @@ export const getProductCategories = async (): Promise<Category[]> => {
   const response = await apiFetch<Category[]>({
     path: "/products/categories",
   });
+
   return response.data;
 };

@@ -2,6 +2,7 @@ import { data } from "react-router";
 import { CartView } from "~/views/CartView";
 import type { Route } from "./+types/cart";
 import { cartCookie, getCartFromRequest } from "~/lib/cart-cookie.server";
+import type { CartItem } from "~/types/cart";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -15,8 +16,21 @@ export function meta({}: Route.MetaArgs) {
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
+  let cartItems: CartItem[] = [];
+
+  try {
+    cartItems = await getCartFromRequest(request);
+  } catch {
+    return data(
+      {
+        success: false as const,
+        error: "Something happened with your cart. Please try again.",
+      },
+      { headers: { "Set-Cookie": await cartCookie.serialize([]) } },
+    );
+  }
+
   const intent = formData.get("intent");
-  const cartItems = await getCartFromRequest(request);
 
   if (intent === "remove") {
     const id = Number(formData.get("id"));

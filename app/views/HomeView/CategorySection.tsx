@@ -13,6 +13,10 @@ export const CategorySection = () => {
     selectCategory(sameCategory ? "" : category.slug);
   };
 
+  if (!categories || categories.length === 0) {
+    return null;
+  }
+
   return (
     <div className="hidden min-w-[240px] flex-col gap-4 py-6 md:flex">
       <p className="mb-2 font-semibold">Categories</p>

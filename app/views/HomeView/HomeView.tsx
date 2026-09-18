@@ -31,7 +31,7 @@ export const HomeView = () => {
             <SortFilter />
             <CategoryFilter />
           </div>
-          {productsData && (
+          {productsData && productsData.total > 0 && (
             <p>
               Showing {currentStartCount}-{currentEndCount} of{" "}
               {productsData.total}

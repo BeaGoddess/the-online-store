@@ -1,5 +1,7 @@
 import { Link, useFetcher } from "react-router";
+import { useEffect } from "react";
 import { Minus, Plus, Trash } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "~/components/Button";
 import type { CartItem } from "~/types/cart";
 import type { action } from "~/routes/cart";
@@ -10,6 +12,12 @@ interface CartItemRowProps {
 
 export const CartItemRow = ({ cartItem }: CartItemRowProps) => {
   const fetcher = useFetcher<typeof action>();
+
+  useEffect(() => {
+    if (fetcher.data?.success === false) {
+      toast.error(fetcher.data.error);
+    }
+  }, [fetcher.data]);
 
   const isPending = fetcher.state !== "idle";
   const pendingIntent = fetcher.formData?.get("intent");

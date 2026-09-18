@@ -6,15 +6,24 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Toaster } from "sonner";
 
 import type { Route } from "./+types/root";
 import { LastAddedProductProvider } from "~/context/LastAddedProductContext";
 import { getCartFromRequest } from "~/lib/cart-cookie.server";
+import { getErrorMessage } from "~/lib/errors";
 import "./app.css";
 
 export async function loader({ request }: Route.LoaderArgs) {
-  const cartItems = await getCartFromRequest(request);
-  return { cartItems };
+  try {
+    const cartItems = await getCartFromRequest(request);
+    return { cartItems };
+  } catch (err) {
+    return {
+      cartItems: [],
+      error: getErrorMessage(err, "We couldn't load your cart."),
+    };
+  }
 }
 
 export const links: Route.LinksFunction = () => [
@@ -41,6 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster position="bottom-right" richColors />
         <ScrollRestoration />
         <Scripts />
       </body>

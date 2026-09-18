@@ -3,6 +3,8 @@ import type { Route } from "./+types/product.$id";
 import { getProduct } from "~/lib/product";
 import { ProductDetailsView } from "~/views/ProductDetailsView";
 import { cartCookie, getCartFromRequest } from "~/lib/cart-cookie.server";
+import type { CartItem } from "~/types/cart";
+import { getErrorMessage } from "~/lib/errors";
 
 export function meta({ loaderData }: Route.MetaArgs) {
   if (!loaderData?.product) {
@@ -19,9 +21,10 @@ export async function loader({ params }: Route.LoaderArgs) {
     const product = await getProduct(params.id);
     return { product, error: null };
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "Something went wrong.";
-    return { product: null, error: message };
+    return {
+      product: null,
+      error: getErrorMessage(err, "We couldn't load this product."),
+    };
   }
 }
 
@@ -48,7 +51,19 @@ export async function action({ request }: Route.ActionArgs) {
     });
   }
 
-  const cartItems = await getCartFromRequest(request);
+  let cartItems: CartItem[] = [];
+  try {
+    cartItems = await getCartFromRequest(request);
+  } catch {
+    return data(
+      {
+        success: false as const,
+        error: "Something happened with your cart. Please try again.",
+      },
+      { headers: { "Set-Cookie": await cartCookie.serialize([]) } },
+    );
+  }
+
   const existing = cartItems.find((item) => item.id === id)!;
   const nextCartItems = existing
     ? cartItems.map((item) =>

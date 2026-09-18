@@ -1,39 +1,46 @@
-import { Link, useFetcher, useRouteLoaderData } from "react-router";
-import { Minus, Plus, Trash } from "lucide-react";
+import { Link, useFetchers, useRouteLoaderData } from "react-router";
 import { useMemo } from "react";
 import { Button, buttonVariants } from "~/components/Button";
 import { Input } from "~/components/Input";
 import { SHIPPING_FEE } from "~/constants/cart";
 import { cn } from "~/lib/utils";
 import type { loader as rootLoader } from "~/root";
+import type { CartItem } from "~/types/cart";
+import { CartItemRow } from "~/views/CartView";
 
 export const CartView = () => {
   const rootData = useRouteLoaderData<typeof rootLoader>("root");
   const { cartItems } = rootData ?? { cartItems: [] };
-  const fetcher = useFetcher();
+  const fetchers = useFetchers();
 
-  const handleRemoveCartItem = (id: number) => {
-    fetcher.submit({ intent: "remove", id }, { method: "post" });
-  };
+  const optimisticCartItems = useMemo(() => {
+    return cartItems.flatMap((item): CartItem[] => {
+      const pending = fetchers.filter(
+        (f) => Number(f.formData?.get("id")) === item.id && f.formData,
+      );
 
-  const handleUpdateCartItemQuantity = (id: number, quantity: number) => {
-    fetcher.submit({ intent: "update", id, quantity }, { method: "post" });
-  };
+      // If there are multiple pending updates, use the last one
+      const last = pending.at(-1);
+      if (!last?.formData) return [item];
 
-  const totalCartPrice = useMemo(
-    () =>
-      cartItems.reduce(
-        (sum, product) => sum + product.price * product.quantity,
-        0,
-      ),
-    [cartItems],
+      const intent = last.formData.get("intent");
+      if (intent === "remove") return [];
+      if (intent === "update") {
+        const quantity = Number(last.formData.get("quantity"));
+        return quantity < 1 ? [] : [{ ...item, quantity }];
+      }
+      return [item];
+    });
+  }, [cartItems, fetchers]);
+
+  const subTotal = optimisticCartItems.reduce(
+    (sum, product) => sum + product.price * product.quantity,
+    0,
   );
 
-  const totalShippingFee = useMemo(() => {
-    return totalCartPrice + SHIPPING_FEE;
-  }, [totalCartPrice]);
+  const totalOrder = subTotal + SHIPPING_FEE;
 
-  if (cartItems.length === 0) {
+  if (optimisticCartItems.length === 0) {
     return (
       <div className="flex flex-col items-center gap-4 py-24 text-center">
         <p className="font-ubuntu text-xl">Your cart is empty.</p>
@@ -47,62 +54,8 @@ export const CartView = () => {
   return (
     <div className="flex w-full flex-col gap-12 lg:flex-row lg:items-start">
       <div className="my-2 flex w-full flex-col divide-y divide-black">
-        {cartItems.map((cartItem) => (
-          <div key={cartItem.id} className="flex items-start gap-6 py-4">
-            <Link
-              to={`/product/${cartItem.id}`}
-              className="bg-primary/5 size-39 shrink-0 overflow-hidden"
-            >
-              <img
-                src={cartItem.image}
-                alt={cartItem.title}
-                className="size-full object-cover"
-              />
-            </Link>
-            <div className="flex flex-col justify-between self-stretch">
-              <div className="flex flex-1 flex-col">
-                <p className="text-md">{cartItem.title}</p>
-                <p className="text-md font-ubuntu">
-                  ${cartItem.price.toFixed(2)}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <div className="border-primary flex w-fit items-center gap-2 rounded-lg border px-3 py-1">
-                  <Button
-                    variant="icon"
-                    onClick={() =>
-                      handleUpdateCartItemQuantity(
-                        cartItem.id,
-                        cartItem.quantity - 1,
-                      )
-                    }
-                  >
-                    <Minus className="size-4" strokeWidth={1} />
-                  </Button>
-                  <span className="w-4 text-center">{cartItem.quantity}</span>
-                  <Button
-                    variant="icon"
-                    onClick={() =>
-                      handleUpdateCartItemQuantity(
-                        cartItem.id,
-                        cartItem.quantity + 1,
-                      )
-                    }
-                  >
-                    <Plus className="size-4" strokeWidth={1.5} />
-                  </Button>
-                </div>
-
-                <Button
-                  variant="icon"
-                  onClick={() => handleRemoveCartItem(cartItem.id)}
-                >
-                  <Trash className="size-6" strokeWidth={1.5} />
-                </Button>
-              </div>
-            </div>
-          </div>
+        {optimisticCartItems.map((cartItem) => (
+          <CartItemRow key={cartItem.id} cartItem={cartItem} />
         ))}
       </div>
       <div className="font-ubuntu border-primary my-6 flex w-full flex-col gap-6 rounded-2xl border p-6 lg:max-w-[400px] lg:min-w-[400px]">
@@ -112,7 +65,7 @@ export const CartView = () => {
           <div>
             <div className="mt-3 flex items-center justify-between">
               <p>Subtotal</p>
-              <p>${totalCartPrice.toFixed(2)}</p>
+              <p>${subTotal.toFixed(2)}</p>
             </div>
             <div className="mt-3 flex items-center justify-between">
               <p>Shipping</p>
@@ -120,7 +73,7 @@ export const CartView = () => {
             </div>
             <div className="mt-3 flex items-center justify-between">
               <p>Total</p>
-              <p>${totalShippingFee.toFixed(2)}</p>
+              <p>${totalOrder.toFixed(2)}</p>
             </div>
           </div>
         </div>

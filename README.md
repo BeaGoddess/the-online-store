@@ -80,7 +80,7 @@ npm run lint        # eslint
 ### Cart (`/cart`)
 
 - Server-persisted cart (HTTP cookie)
-- Update item quantity, remove items
+- Update item quantity, remove items — optimistic UI (each row updates instantly on click and rolls back automatically if the request fails, via `fetcher.formData`)
 - Checkout summary: subtotal, shipping fee, total
 - Promo code input (UI only)
 - Empty-cart state with a "Continue Shopping" link

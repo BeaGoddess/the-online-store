@@ -4,7 +4,7 @@ import { NavItem } from "~/components/NavItem";
 import { Overlay } from "~/components/Overlay";
 import { navLinks } from "~/constants/navLinks";
 import { cn } from "~/lib/utils";
-import { Button } from "../Button";
+import { Button } from "~/components/Button";
 
 export const MenuDrawer = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

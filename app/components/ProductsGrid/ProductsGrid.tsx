@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 import { Badge } from "~/components/Badge";
 import type { Product } from "~/types/product";
-import { Pagination } from "../Pagination/Pagination";
-import { getDiscountedPrice } from "~/lib/product";
 import { DEFAULT_LIMIT } from "~/lib/product";
-import { ProductSkeleton } from "./ProductSkeleton";
+import { getDiscountedPrice } from "~/lib/product";
+import { Pagination } from "~/components/Pagination";
+import { ProductSkeleton } from "~/components/ProductsGrid";
 
 interface ProductsGridProps {
   products: Product[];

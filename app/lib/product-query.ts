@@ -1,5 +1,5 @@
 import { FILTER_OPTIONS } from "~/constants/filters";
-import { DEFAULT_LIMIT } from "./product";
+import { DEFAULT_LIMIT } from "~/lib/product";
 
 interface BuildProductQueryParams {
   sortBy?: string;

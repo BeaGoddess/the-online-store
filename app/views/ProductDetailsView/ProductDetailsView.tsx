@@ -21,7 +21,7 @@ export const ProductDetailsView = () => {
 
   if (!product) return null;
 
-  const isAddingToCart = fetcher.state !== "idle";
+  const isAddingToCart = fetcher.state === "submitting";
   const isOutOfStock = product.stock === 0;
   const discountedPrice = getDiscountedPrice(
     product.price,

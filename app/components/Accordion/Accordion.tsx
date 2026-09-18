@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "~/lib/utils";
-import { Button } from "../Button";
+import { Button } from "~/components/Button";
 
 interface AccordionProps {
   title: React.ReactNode;

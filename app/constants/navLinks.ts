@@ -1,4 +1,4 @@
-export const navLinks: { to: string; label: string }[] = [
+export const navLinks = [
   { to: "/", label: "Home" },
   { to: "/shop", label: "Shop" },
   { to: "/deals", label: "Deals" },

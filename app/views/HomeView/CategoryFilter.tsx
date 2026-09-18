@@ -1,10 +1,11 @@
-import { useLoaderData } from "react-router";
-import type { loader } from "~/routes/home";
+import { useRouteLoaderData } from "react-router";
+import type { loader } from "~/routes/categories";
 import { Select } from "~/components/Select";
 import { useCategoryFilter } from "~/hooks/useCategoryFilter";
 
 export const CategoryFilter = () => {
-  const { categories } = useLoaderData<typeof loader>();
+  const { categories } =
+    useRouteLoaderData<typeof loader>("routes/categories")!;
   const { selectedCategory, selectCategory } = useCategoryFilter();
 
   return (

@@ -1,9 +1,9 @@
 import { X } from "lucide-react";
-import { useSearchParams } from "react-router";
 import { Button } from "~/components/Button";
+import { useOptimisticSearchParams } from "~/hooks/useOptimisticSearchParams";
 
 export const ActiveSearch = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useOptimisticSearchParams();
   const searchQuery = searchParams.get("q") || "";
 
   const handleRemoveSearch = () => {

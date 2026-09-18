@@ -1,10 +1,10 @@
-import { useSearchParams } from "react-router";
 import { Select } from "~/components/Select";
 import { FILTER_OPTIONS } from "~/constants/filters";
 import { SORT_OPTIONS } from "~/constants/filters";
+import { useOptimisticSearchParams } from "~/hooks/useOptimisticSearchParams";
 
 export const SortFilter = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useOptimisticSearchParams();
 
   const getValue = () => {
     const sortBy = searchParams.get(FILTER_OPTIONS.SORT_BY);

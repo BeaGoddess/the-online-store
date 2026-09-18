@@ -10,11 +10,13 @@ interface LastAddedProductContextValue {
 export const LastAddedProductContext =
   createContext<LastAddedProductContextValue | null>(null);
 
+interface LastAddedProductProviderProps {
+  children: React.ReactNode;
+}
+
 export const LastAddedProductProvider = ({
   children,
-}: {
-  children: React.ReactNode;
-}) => {
+}: LastAddedProductProviderProps) => {
   const [lastAddedProduct, setLastAddedProduct] = useState<CartItem | null>(
     null,
   );
@@ -28,7 +30,11 @@ export const LastAddedProductProvider = ({
   }, []);
 
   const value = useMemo(
-    () => ({ lastAddedProduct, showLastAddedProduct, hideLastAddedProduct }),
+    () => ({
+      lastAddedProduct,
+      showLastAddedProduct,
+      hideLastAddedProduct,
+    }),
     [lastAddedProduct, showLastAddedProduct, hideLastAddedProduct],
   );
 

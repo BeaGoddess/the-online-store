@@ -81,7 +81,7 @@ export const Header = () => {
             {lastAddedProduct && (
               <AddedToCartToast
                 cartItem={lastAddedProduct}
-                key={lastAddedProduct.id}
+                key={`${lastAddedProduct.id}-${lastAddedProduct.quantity}`}
               />
             )}
           </div>

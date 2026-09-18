@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { useFetcher, useLoaderData } from "react-router";
 import { ProductImageSlider } from "~/views/ProductDetailsView";
 import type { action, loader } from "~/routes/product.$id";
@@ -20,6 +21,7 @@ export const ProductDetailsView = () => {
 
   if (!product) return null;
 
+  const isAddingToCart = fetcher.state !== "idle";
   const isOutOfStock = product.stock === 0;
   const discountedPrice = getDiscountedPrice(
     product.price,
@@ -75,11 +77,16 @@ export const ProductDetailsView = () => {
           </p>
         </div>
         <Button
-          className="w-full rounded-none"
+          className="flex w-full items-center justify-center gap-2 rounded-none"
           onClick={handleAddToCart}
-          disabled={isOutOfStock}
+          disabled={isOutOfStock || isAddingToCart}
         >
-          {isOutOfStock ? "Available Soon" : "Add to Cart"}
+          {isAddingToCart && <Loader2 className="size-4 animate-spin" />}
+          {isOutOfStock
+            ? "Available Soon"
+            : isAddingToCart
+              ? "Adding..."
+              : "Add to Cart"}
         </Button>
 
         <div className="border-primary font-ubuntu flex flex-col gap-2 border-t pt-4">

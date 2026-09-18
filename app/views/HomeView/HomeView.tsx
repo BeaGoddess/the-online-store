@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigation } from "react-router";
 import type { loader } from "~/routes/home";
 import { ProductsGrid } from "~/components/ProductsGrid";
 import { usePagination } from "~/hooks/usePagination";
@@ -11,6 +11,9 @@ import {
 
 export const HomeView = () => {
   const { productsData, error } = useLoaderData<typeof loader>();
+  const navigation = useNavigation();
+  const isLoading =
+    navigation.state === "loading" && navigation.location.pathname === "/";
   const { products } = productsData ?? { products: [] };
   const {
     currentPage,
@@ -42,6 +45,7 @@ export const HomeView = () => {
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={onPageChange}
+          isLoading={isLoading}
         />
       </div>
       <CategorySection />

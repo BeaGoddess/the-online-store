@@ -3,6 +3,8 @@ import { Badge } from "~/components/Badge";
 import type { Product } from "~/types/product";
 import { Pagination } from "../Pagination/Pagination";
 import { getDiscountedPrice } from "~/lib/product";
+import { DEFAULT_LIMIT } from "~/lib/product";
+import { ProductSkeleton } from "./ProductSkeleton";
 
 interface ProductsGridProps {
   products: Product[];
@@ -10,6 +12,7 @@ interface ProductsGridProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  isLoading?: boolean;
 }
 
 export const ProductsGrid = ({
@@ -18,7 +21,18 @@ export const ProductsGrid = ({
   currentPage,
   totalPages,
   onPageChange,
+  isLoading = false,
 }: ProductsGridProps) => {
+  if (isLoading) {
+    return (
+      <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">
+        {Array.from({ length: DEFAULT_LIMIT }).map((_, index) => (
+          <ProductSkeleton key={index} />
+        ))}
+      </ul>
+    );
+  }
+
   return (
     <>
       <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-6">

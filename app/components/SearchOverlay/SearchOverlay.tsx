@@ -20,9 +20,11 @@ export const SearchOverlay = () => {
 
   const { query, error, productsData } = fetcher.data ?? {};
   const { products } = productsData ?? {};
+  const inStockProducts = products?.filter((product) => product.stock > 0);
   const isLoading = fetcher.state === "loading";
-  const showNoResults = !isLoading && products?.length === 0;
-  const showAllResults = products && products?.length > 0 && !isLoading;
+  const showNoResults = !isLoading && inStockProducts?.length === 0;
+  const showAllResults =
+    inStockProducts && inStockProducts?.length > 0 && !isLoading;
   const showError = !isLoading && error;
 
   useEffect(() => {
@@ -62,7 +64,8 @@ export const SearchOverlay = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate(`/?q=${encodeURIComponent(fetcher.data?.query ?? "")}`);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    navigate(`/?q=${encodeURIComponent(inputRef.current?.value ?? "")}`);
     handleClose();
   };
 
@@ -115,7 +118,8 @@ export const SearchOverlay = () => {
             <>
               {showError ? (
                 <p className="text-sm text-red-500">{error}</p>
-              ) : isLoading || (products && products?.length > 0) ? (
+              ) : isLoading ||
+                (inStockProducts && inStockProducts?.length > 0) ? (
                 <div className="flex flex-row gap-4 overflow-x-auto">
                   {isLoading
                     ? new Array(5)
@@ -123,7 +127,7 @@ export const SearchOverlay = () => {
                         .map((_, index) => (
                           <SearchProductSkeleton key={index} />
                         ))
-                    : products?.map((product) => (
+                    : inStockProducts?.map((product) => (
                         <SearchProduct
                           key={product.id}
                           product={product}

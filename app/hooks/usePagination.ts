@@ -1,6 +1,6 @@
-import { useSearchParams } from "react-router";
 import { FILTER_OPTIONS } from "~/constants/filters";
 import { DEFAULT_LIMIT } from "~/lib/product";
+import { useOptimisticSearchParams } from "~/hooks/useOptimisticSearchParams";
 
 interface UsePaginationOptions {
   total: number;
@@ -11,7 +11,7 @@ export const usePagination = ({
   total,
   limit = DEFAULT_LIMIT,
 }: UsePaginationOptions) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useOptimisticSearchParams();
   const currentPage = parseInt(searchParams.get(FILTER_OPTIONS.PAGE) || "1");
 
   const onPageChange = (page: number) => {

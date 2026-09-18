@@ -1,8 +1,8 @@
-import { useSearchParams } from "react-router";
 import { FILTER_OPTIONS } from "~/constants/filters";
+import { useOptimisticSearchParams } from "~/hooks/useOptimisticSearchParams";
 
 export const useCategoryFilter = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useOptimisticSearchParams();
   const selectedCategory = searchParams.get(FILTER_OPTIONS.CATEGORY) ?? "";
 
   const selectCategory = (slug: string) => {
@@ -15,7 +15,6 @@ export const useCategoryFilter = () => {
     next.delete(FILTER_OPTIONS.PAGE);
     next.delete(FILTER_OPTIONS.Q);
     setSearchParams(next);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return { selectedCategory, selectCategory };

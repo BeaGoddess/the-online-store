@@ -1,10 +1,11 @@
 import { type Category } from "~/types/category";
-import { useLoaderData } from "react-router";
-import type { loader } from "~/routes/home";
+import { useRouteLoaderData } from "react-router";
+import type { loader } from "~/routes/categories";
 import { useCategoryFilter } from "~/hooks/useCategoryFilter";
 
 export const CategorySection = () => {
-  const { categories } = useLoaderData<typeof loader>();
+  const { categories } =
+    useRouteLoaderData<typeof loader>("routes/categories")!;
   const { selectedCategory, selectCategory } = useCategoryFilter();
 
   const toggleCategory = (category: Category) => {
